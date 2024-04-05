@@ -1,0 +1,79 @@
+<c-card class="mb-4">
+  <c-card-body>
+    <c-row>
+      <c-col sm="5">
+        <h4 class="card-title mb-0" id="traffic"> Form  </h4>
+      </c-col>
+    </c-row>
+
+    <br>
+    <div>
+      <ng-content select="app-yes-parameters"></ng-content>
+    </div>
+    <form #f="ngForm">
+      <div>
+        <!-- Action here like : add, delete,... -->
+        <button type="button" class="btn btn-success waves-effect"
+         (click)="save(f.value)">Save</button> &nbsp;
+        <button type="button" class="btn btn-info waves-effect" (click)="cancel()">Annuler</button> &nbsp;
+        <button type="button" class="btn btn-info waves-effect" (click)="Attacher()">Attacher</button>
+
+      </div>
+      <br />
+      <div>
+        <div>
+
+    <label cLabel for="exampleFormControlInput1">Compte Créditeur (INVESTISEMENT)</label>
+          <c-dropdown cFormControl  style="width: 100%;" style="margin-bottom: 10px;">
+            <a cButton cDropdownToggle color="secondary" size="sm" >
+              {{ this.object == null ? "": this.object!.creditorAccount!.description}}
+            </a>
+            <ul cDropdownMenu style="width: 100%;">
+              <li *ngFor="let creditorAccountItem of accountList">
+                <a (click)="selecCreditortAccount(creditorAccountItem)" cDropdownItem>{{creditorAccountItem.description}}</a>
+              </li>
+            </ul>
+          </c-dropdown>
+     
+          <label cLabel for="exampleFormControlInput1">Compte Débitor</label>
+          <c-dropdown cFormControl  style="width: 100%;" style="margin-bottom: 10px;">
+            <a cButton cDropdownToggle color="secondary" size="sm" >
+              {{ this.object == null ? "": this.object!.debtorAccount!.description}}
+            </a>
+            <ul cDropdownMenu style="width: 100%;">
+              <li *ngFor="let debitorAccountItem of accountList">
+                <a (click)="selectDebitorAccount(debitorAccountItem)" cDropdownItem>{{debitorAccountItem.description}}</a>
+              </li>
+            </ul>
+          </c-dropdown> 
+
+
+
+          <input cFormControl type="text" hidden="true" [(ngModel)]="object.id" name="id" placeholder="Id" />
+          <!-- <label cLabel for="exampleFormControlInput1">Code</label> -->
+          <label cLabel for="exampleFormControlInput1" >Montant à crédité</label>
+          <ejs-numerictextbox cFormControl  [(ngModel)]="object.amount"  format="C2"  name="amount" placeholder="Montant à crédité" style="margin-bottom: 10px;"></ejs-numerictextbox>
+          <label cLabel for="exampleFormControlInput1">Date début</label>
+          <ejs-datepicker   [(ngModel)]="object.startDate"  [format]="dateFormat" name="startDate"  [enableMask]="enableMaskSupport" cssClass="e-outline" floatLabelType="Auto"></ejs-datepicker>
+
+        <label cLabel for="exampleFormControlInput1">Date fin</label>
+        <!-- <input cFormControl type="datetime" [(ngModel)]="object.endDate"   name="actionDate" placeholder="Date fin"  style="margin-bottom: 10px;"/> -->
+        <ejs-datepicker   [(ngModel)]="object.endDate"  [format]="dateFormat" name="endDate"  [enableMask]="enableMaskSupport" cssClass="e-outline" floatLabelType="Auto"></ejs-datepicker>
+
+        <label cLabel for="exampleFormControlInput1">Taux d'interêt</label>
+          <input cFormControl type="text" [(ngModel)]="object.interestRate" name="interestRate" placeholder="Taux d'interêt" style="margin-bottom: 10px;"/>
+        </div>
+        <br>
+      </div>
+    </form>
+   
+  </c-card-body>
+  <c-card-footer>
+    <c-row class="text-center" [md]="5" [xs]="1">
+      <c-col class="mb-sm-2 mb-0">
+      </c-col>
+      <c-col class="mb-sm-2 mb-0">
+      </c-col>
+    </c-row>
+  </c-card-footer>
+</c-card>

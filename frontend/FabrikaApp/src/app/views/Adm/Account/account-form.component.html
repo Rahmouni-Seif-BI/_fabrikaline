@@ -1,0 +1,304 @@
+<c-col sm="12"  style="text-align:Center;">
+  <h4 class="card-title mb-0" id="traffic"> <h1 style="color: rgb(0, 1, 80); text-transform: uppercase;  font-size: 48px;">{{object.description }} <br><br></h1></h4>
+</c-col>
+<c-nav variant="tabs">
+  <a [active]="true" [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="0" cNavLink>Détails compte</a>
+  <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="1" cNavLink>Montant consommé</a>
+  <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="2" cNavLink>Montant versé</a>
+  <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="3"  [hidden]="this.hidden" cNavLink>Crédit</a>
+  <a [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="4"  [hidden]="this.hidden" cNavLink>Payement du crédit</a>
+</c-nav>
+<c-tab-content #tabContent="cTabContent">
+  
+  <!-- Détails compte -->
+  <c-tab-pane class="p-3">
+    <c-card class="mb-4">
+      <c-card-body>
+
+        <ejs-chart id = 'spline' style="height:100%; width:100%" [primaryXAxis]='spLineAreaprimaryXAxis'
+        [primaryYAxis]='spLineAreaprimaryYAxis' [tooltip]='spLineAreatooltipSettings' [chartArea]='chartArea'
+        [legendSettings]="spLineLegendSettings" (load)='load1($event)'>
+        <e-series-collection>
+          <e-series [dataSource]='spLineAreaData' name='INVESTISEMENT' type='SplineArea' xName='Period' yName='Percentage'
+            opacity='0.3' width='2.5' [fill]="spLineAreaFill" [border]='spLineAreaBorder'>
+          </e-series>
+          <e-series [dataSource]='spLineAreaData2' name='Spending' type='SplineArea' xName='Period' yName='Percentage'
+            opacity='0.3' width='2.5' [fill]="spLineAreaFill1" [border]='spLineAreaBorder1'>
+          </e-series>
+          <e-series [dataSource]='spLineAreaData2' name='Obligation' type='SplineArea' xName='Period' yName='Percentage'
+            opacity='0.3' width='2.5' [fill]="spLineAreaFill1" [border]='spLineAreaBorder1'>
+          </e-series>
+        </e-series-collection>
+      </ejs-chart>
+        <div>
+          <!-- Action here like : add, delete,... -->
+          <button type="button" class="btn btn-success waves-effect"
+            [disabled]=' object.description=="" || object.description== null || object.code=="" || object.code== null'
+            (click)="save(f.value)">Save</button> &nbsp;
+          <button type="button" class="btn btn-info waves-effect" (click)="cancel()">Annuler</button>
+        </div>
+        <br>
+        <br>
+      
+     <c-row>
+          <!-- <c-col sm="12"  style="text-align:Center;">
+            <h4 class="card-title mb-0" id="traffic"> <h1 style="color: rgb(0, 1, 80); text-transform: uppercase;  font-size: 48px;">{{object.description }} <br><br></h1></h4>
+          </c-col> -->
+         
+        </c-row>
+        <c-row>
+          <c-col sm="4" style="text-align:Center; ">
+            <h4 class="card-title mb-0" id="traffic"> Solde versé <br><br> <h3  style="color: green; ">{{object.calculatedAmountbalance }} TND</h3></h4>
+          </c-col>
+          <c-col sm="4" style="text-align:Center; ">
+            <h4 class="card-title mb-0" id="traffic" >  Montant consommé <br><br> <h3  style="color: red;">{{object.calculatedAmountconsumed }} TND</h3></h4>
+          </c-col>
+          <c-col sm="4" style="text-align:Center; ">
+            <h4 class="card-title mb-0" id="traffic" > Montant disponible <br><br> <h3 style="color: blue;">{{object.calculatedAmountRest }} TND</h3> </h4>
+          </c-col>
+        </c-row>
+        <br>
+        <br>
+        <div>
+        </div>
+        <form #f="ngForm">
+    
+    
+          <br />
+          <div>
+            <div>
+              <input cFormControl type="text" hidden="true" [(ngModel)]="object.id" name="id" placeholder="Id" />
+              <label cLabel for="exampleFormControlInput1">Code</label>
+              <input cFormControl type="text" [(ngModel)]="object.code" name="code" placeholder="Code"
+                style="margin-bottom: 10px;" />
+              <label cLabel for="exampleFormControlInput1">Description</label>
+              <input cFormControl type="text" [(ngModel)]="object.description" name="description" placeholder="Description"
+                style="margin-bottom: 10px;" />
+              <label cLabel for="exampleFormControlInput1">Titulaire </label>
+              <input cFormControl type="text" [(ngModel)]="object.owner" name="owner" placeholder="Titulaire"
+                style="margin-bottom: 10px;" />
+              <!-- <label cLabel for="exampleFormControlInput1">Solde </label>
+              <input cFormControl type="text" [(ngModel)]="object.amountbalance" name="amountbalance" placeholder="Solde" style="margin-bottom: 10px;" /> -->
+            </div>
+    
+            <br>
+          </div>
+        </form>
+        <c-row style="margin-bottom: 10px;">
+          <c-col sm="5">
+            <h4 class="card-title mb-0" id="traffic" style="color: red;"> Transactions (-)</h4>
+          </c-col>
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <ejs-grid #gridSpending  [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+            [allowGrouping]="true"  [allowExcelExport]='true' [allowPdfExport]='true'
+            [allowReordering]='true'>
+            <e-columns>
+              <e-column field='Code' headerText='Code' textAlign='Left' width=60></e-column>
+              <e-column field='AmountToSpend' headerText='Montant à dépenser' textAlign='Left' format="C2" width=90></e-column>
+              <e-column field='ActionDate' headerText="Date d'action"  [format]='format' type="datetime" textAlign='Left' width=100> </e-column>
+              <e-column field='Purpose.Description' headerText='Besoin' textAlign='Left' width=60></e-column>
+              <e-column field='CreditStatus.Description' headerText='Status de crédit' textAlign='Left' width=90></e-column>
+              <e-column field='Notes' headerText='Notes' textAlign='Left' width=150></e-column>
+            </e-columns>
+          </ejs-grid>`
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <c-col sm="5">
+            <h4 class="card-title mb-0" id="traffic" style="color: green;"> Transactions (+)</h4>
+          </c-col>
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <ejs-grid #gridDeposite  Deposite [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+            [allowGrouping]="true" (load)='loadDeposite()' [allowExcelExport]='true' [allowPdfExport]='true'
+            [allowReordering]='true'>
+            <e-columns>
+              <e-column field='Code' headerText='Code' textAlign='Left' width=60></e-column>
+              <e-column field='amountToDeposite' headerText='Montant versé' textAlign='Left'  format="C2" width=90></e-column>
+              <e-column field='ActionDate' headerText="Date d'action" textAlign='Left'  [format]='format' type="datetime" width=100></e-column>
+              <e-column field='Notes' headerText='Notes' textAlign='Left' width=150></e-column>
+            </e-columns>
+          </ejs-grid>`
+        </c-row>
+    
+      </c-card-body>
+      <c-card-footer>
+        <c-row class="text-center" [md]="5" [xs]="1">
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+        </c-row>
+      </c-card-footer>
+    </c-card>
+  </c-tab-pane>
+  
+  <!-- Montant consommé -->
+  <c-tab-pane class="p-3">
+    <c-card class="mb-4">
+      <c-card-body>
+        <c-row style="margin-bottom: 10px;">
+          <c-col sm="5">
+            <h4 class="card-title mb-0" id="traffic" style="color: red;"> Transactions (-)</h4>
+          </c-col>
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <ejs-grid #gridSpending2  [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+            [allowGrouping]="false"  [allowExcelExport]='true' [allowPdfExport]='true'
+            [allowReordering]='true'>
+            <e-columns>
+              <e-column field='Code' headerText='Code' textAlign='Left' width=90></e-column>
+              <e-column field='AmountToSpend' headerText='Montant à dépenser' textAlign='Left' width=90></e-column>
+              <e-column field='ActionDate' headerText="Date d'action"  [format]='format' type="datetime" textAlign='Left' width=90> </e-column>
+              <e-column field='Purpose.Description' headerText='Besoin' textAlign='Left' width=90></e-column>
+              <e-column field='CreditStatus.Description' headerText='Status de crédit' textAlign='Left' width=90></e-column>
+              <e-column field='Notes' headerText='Notes' textAlign='Left' width=150></e-column>
+            </e-columns>
+          </ejs-grid>`
+        </c-row>
+    
+      </c-card-body>
+      <c-card-footer>
+        <c-row class="text-center" [md]="5" [xs]="1">
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+        </c-row>
+      </c-card-footer>
+    </c-card>
+    
+  </c-tab-pane>
+
+  <!-- Montant versé -->
+  <c-tab-pane class="p-3">
+    <c-card class="mb-4">
+      <c-card-body>
+        <c-row style="margin-bottom: 10px;">
+          <c-col sm="5">
+            <h4 class="card-title mb-0" id="traffic" style="color: green;"> Transactions (+)</h4>
+          </c-col>
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <ejs-grid #gridDeposite2  Deposite [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+            [allowGrouping]="true" (load)='loadDeposite()' [allowExcelExport]='true' [allowPdfExport]='true'
+            [allowReordering]='true'>
+            <e-columns>
+              <e-column field='Code' headerText='Code' textAlign='Left' width=60></e-column>
+              <e-column field='amountToDeposite' headerText='Montant versé' textAlign='Left'  format="C2" width=90></e-column>
+              <e-column field='ActionDate' headerText="Date d'action" textAlign='Left'  [format]='format' type="datetime" width=100></e-column>
+              <e-column field='Notes' headerText='Notes' textAlign='Left' width=150></e-column>
+            </e-columns>
+          </ejs-grid>`
+        </c-row>
+    
+      </c-card-body>
+      <c-card-footer>
+        <c-row class="text-center" [md]="5" [xs]="1">
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+        </c-row>
+      </c-card-footer>
+    </c-card>
+    
+  </c-tab-pane>
+
+  <!-- Crédit -->
+  <c-tab-pane class="p-3">
+    <c-card class="mb-4">
+      <c-card-body>
+        <c-row style="margin-bottom: 10px;">
+          <c-col sm="5">
+            <h4 class="card-title mb-0" id="traffic" style="color: rgb(145, 2, 2);"> List de crédit par compte (-)</h4>
+          </c-col>
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <ejs-grid #gridCredit   [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+            [allowGrouping]="true"  [allowExcelExport]='true' [allowPdfExport]='true'
+            [allowReordering]='true'>
+            <e-columns>
+              <e-column field='DebtorAccount.description' headerText='Compte débiteur' textAlign='Left' width=160></e-column>
+    
+              <e-column field='Amount' headerText='Montant crédité' textAlign='Left' width=140></e-column>
+              <e-column field='IntersetRate' headerText='Taux INS' textAlign='Left'  format="C2" width=100></e-column>
+              <e-column field='StartDate' headerText="Date d'emprunt" textAlign='Left'  [format]='format' type="datetime" width=140></e-column>
+              <e-column field='EndDate' headerText='délais' textAlign='Left' [format]='format' type="datetime" width=150></e-column>
+            </e-columns>
+          </ejs-grid>`
+        </c-row>
+      </c-card-body>
+      <c-card-footer>
+        <c-row class="text-center" [md]="5" [xs]="1">
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+        </c-row>
+      </c-card-footer>
+    </c-card>
+  </c-tab-pane>
+
+  <!-- Payemnt -->
+  <c-tab-pane class="p-3">
+
+    <c-card class="mb-4">
+      <c-card-body>
+        <c-row style="margin-bottom: 10px;">
+          <c-col sm="5">
+            <h4 class="card-title mb-0" id="traffic" style="color: rgb(35, 151, 0);"> List de payement par compte (+)</h4>
+          </c-col>
+        </c-row>
+        <c-row style="margin-bottom: 10px;">
+          <ejs-grid #gridRepayment   [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+            [allowGrouping]="true"  [allowExcelExport]='true' [allowPdfExport]='true'
+            [allowReordering]='true'>
+            <e-columns>
+              <e-column field='debtorAccountDTO.description' headerText='Compte débiteur' textAlign='Left' width=160></e-column>
+              <e-column field='AmountRepaid' headerText='Montant payé' textAlign='Left' width=140></e-column>
+              <e-column field='RepaymentDate' headerText="Date de payement" textAlign='Left'  [format]='format' type="datetime" width=140></e-column>
+            </e-columns>
+          </ejs-grid>`
+        </c-row>
+      </c-card-body>
+      <c-card-footer>
+        <c-row class="text-center" [md]="5" [xs]="1">
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+          <c-col class="mb-sm-2 mb-0">
+          </c-col>
+        </c-row>
+      </c-card-footer>
+    </c-card>
+   
+  </c-tab-pane>
+</c-tab-content>
+
+
+
+
+ 
+  
+  <c-tab-pane class="p-3">
+    <c-row style="margin-bottom: 10px;">
+      <c-col sm="5">
+        <h4 class="card-title mb-0" id="traffic" style="color: rgb(145, 2, 2);"> List de crédit par compte (-)</h4>
+      </c-col>
+    </c-row>
+    <c-row style="margin-bottom: 10px;">
+      <ejs-grid #gridCredit   [allowPaging]="true" [allowSorting]='true' [allowMultiSorting]='true' printMode='CurrentPage'
+        [allowGrouping]="true"  [allowExcelExport]='true' [allowPdfExport]='true'
+        [allowReordering]='true'>
+        <e-columns>
+          <e-column field='DebtorAccount.description' headerText='Compte débiteur' textAlign='Left' width=160></e-column>
+
+          <e-column field='Amount' headerText='Montant crédité' textAlign='Left' width=140></e-column>
+          <e-column field='IntersetRate' headerText='Taux INS' textAlign='Left'  format="C2" width=100></e-column>
+          <e-column field='StartDate' headerText="Date d'emprunt" textAlign='Left'  [format]='format' type="datetime" width=140></e-column>
+          <e-column field='EndDate' headerText='délais' textAlign='Left' [format]='format' type="datetime" width=150></e-column>
+        </e-columns>
+      </ejs-grid>`
+    </c-row>
+  </c-tab-pane>
+  <c-tab-pane class="p-3">

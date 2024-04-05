@@ -1,0 +1,17 @@
+export * from './accountController.service';
+import { AccountControllerService } from './accountController.service';
+export * from './creditEntityController.service';
+import { CreditEntityControllerService } from './creditEntityController.service';
+export * from './creditStatusController.service';
+import { CreditStatusControllerService } from './creditStatusController.service';
+export * from './dashboardController.service';
+import { DashboardControllerService } from './dashboardController.service';
+export * from './depositeController.service';
+import { DepositeControllerService } from './depositeController.service';
+export * from './purposeController.service';
+import { PurposeControllerService } from './purposeController.service';
+export * from './repaymentEntityController.service';
+import { RepaymentEntityControllerService } from './repaymentEntityController.service';
+export * from './spendingController.service';
+import { SpendingControllerService } from './spendingController.service';
+export const APIS = [AccountControllerService, CreditEntityControllerService, CreditStatusControllerService, DashboardControllerService, DepositeControllerService, PurposeControllerService, RepaymentEntityControllerService, SpendingControllerService];

@@ -1,0 +1,44 @@
+<c-card class="mb-4">
+  <c-card-body>
+    <c-row style="margin-bottom: 70px;" style="align-content: center;">
+      <c-col sm="12">
+        <h4 class="card-title mb-0" id="traffic" > Dashboard </h4><br><br><br><br>
+      </c-col>
+    </c-row>
+    <c-row><br><br><br><br>
+      <c-col sm="12" style="align-content: center;">
+        <h4 class="card-title mb-0" id="traffic">Total consommation par besoins</h4><br>
+        <c-chart type="bar" [data]="chartDoughnutData"></c-chart><br><br><br><br>
+      </c-col>
+      <c-col sm="6" style="align-content: center;">
+        <h4 style="align-content: center;" class="card-title mb-0" id="traffic">Total versement par compte</h4><br>
+        <c-chart type="pie" [data]="totalDepositeByAccountData"></c-chart>
+      </c-col>
+      <c-col sm="6" style="align-content: center;">
+        <h4 class="card-title mb-0" id="traffic">Total consommation par compte</h4><br>
+        <c-chart type="doughnut" [data]="totalconsumedByAccountData"></c-chart>
+      </c-col>
+    </c-row>
+<br>
+<br>
+<br>
+<br>
+<br>
+    <c-row style="align-content: center;">
+     
+      <c-col sm="" style="align-content: center;">
+        <h4 class="card-title mb-0" id="traffic">Total reste par compte</h4><br>
+        <c-chart type="line" [data]="totalResteByAccountData"></c-chart>
+      </c-col>
+    </c-row>
+
+  </c-card-body>
+  <c-card-footer>
+    <c-row class="text-center" [md]="5" [xs]="1">
+      <c-col class="mb-sm-2 mb-0">
+      </c-col>
+      <c-col class="mb-sm-2 mb-0">
+      </c-col>
+    </c-row>
+  </c-card-footer>
+</c-card>

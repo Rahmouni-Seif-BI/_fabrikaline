@@ -1,0 +1,43 @@
+<c-card class="mb-4">
+  <c-card-body>
+    <c-row>
+      <c-col sm="5">
+        <h4 class="card-title mb-0" id="traffic"> Payement </h4>
+      </c-col>
+    </c-row>
+    <br>
+    <div>
+      <ng-content select="app-yes-parameters"></ng-content>
+    </div>
+    <div>
+      <!-- Action here like : add, delete,... -->
+      <button cButton color="info" routerLink="/Adm/RepaymentEntityForm">Ajouter</button> &nbsp;
+      <button cButton color="info" (click)="modify()">Modifier</button> &nbsp;
+      <button cButton color="info" (click)="delete()">Supprimer</button> &nbsp;
+      <button cButton color="info" (click)="load()">Refrech</button> &nbsp;
+      <button cButton color="light" align="Left" (click)="load()">More</button>
+    </div>
+    <div>
+      <br />
+      <ejs-grid #grid height='500px' height='500px' [toolbar]='toolbarOptions' (recordDoubleClick)="onDoubleClick($event)" [allowSorting]='true'
+        [allowMultiSorting]='true' printMode='CurrentPage' [allowGrouping]="true"
+        (recordDoubleClick)="onDoubleClick($event)"  [allowExcelExport]='true' [allowPdfExport]='true'
+        [allowReordering]='true'>
+        <e-columns>
+          <e-column field='AmountRepaid' headerText='Montant à payer' format="C2" textAlign='Left'  width=90></e-column>
+          <e-column field='RepaymentDate' headerText="Date payement" [format]='format' type="datetime" textAlign='Left'  width=90></e-column>
+          <e-column field='creditorAccountDTO.Description' headerText='Compte créditeur' textAlign='Left'  width=90></e-column>
+          <e-column field='debtorAccountDTO.Description' headerText='Compte débiteur' textAlign='Left'  width=90></e-column>
+        </e-columns>
+      </ejs-grid>`
+    </div>
+  </c-card-body>
+  <c-card-footer>
+    <c-row class="text-center" [md]="5" [xs]="1">
+      <c-col class="mb-sm-2 mb-0">
+      </c-col>
+      <c-col class="mb-sm-2 mb-0">
+      </c-col>
+    </c-row>
+  </c-card-footer>
+</c-card>
